@@ -1,0 +1,43 @@
+Reference,Value,Footprint,LCSC,Manufacturer,Part Number,Description,Stock,LCSC_verified
+J_ESP_L,Socket_1x10,PinSocket_1x10_P2.54mm_Vertical,C2897373,HCTL,PM254-1-10-Z-8.5,Female header ESP32-C6 left row,zu bestellen,yes https://www.lcsc.com/product-detail/C2897373.html
+J_ESP_R,Socket_1x10,PinSocket_1x10_P2.54mm_Vertical,C2897373,HCTL,PM254-1-10-Z-8.5,Female header ESP32-C6 right row,zu bestellen,yes https://www.lcsc.com/product-detail/C2897373.html
+J_IO21,Socket_1x01,PinSocket_1x01_P2.54mm_Vertical,,any,2.54-1x01,Female for GPIO21 stamp TEMP,zu bestellen (cut from 1xN strip; no invented LCSC),empty_by_policy
+J_PWR,KF128_5.08_2P,TerminalBlock_Phoenix_MKDS-1.5-2-5.08,C474940,Cixi Kefa Elec,KF128L-5.08-2P,12V screw terminal 2P 5.08mm,zu bestellen,yes https://www.lcsc.com/product-detail/C474940.html
+J_FAN1,2510-4A,PinHeader_1x04_P2.54mm_Vertical,C2982033,HCTL,HC-2510-4A,4-pin fan header ch1,zu bestellen,yes https://www.lcsc.com/product-detail/C2982033.html
+J_FAN2,2510-4A,PinHeader_1x04_P2.54mm_Vertical,C2982033,HCTL,HC-2510-4A,4-pin fan header ch2,zu bestellen,yes https://www.lcsc.com/product-detail/C2982033.html
+J_FAN3,2510-4A,PinHeader_1x04_P2.54mm_Vertical,C2982033,HCTL,HC-2510-4A,4-pin fan header ch3,zu bestellen,yes https://www.lcsc.com/product-detail/C2982033.html
+J_FAN4,2510-4A,PinHeader_1x04_P2.54mm_Vertical,C2982033,HCTL,HC-2510-4A,4-pin fan header ch4,zu bestellen,yes https://www.lcsc.com/product-detail/C2982033.html
+J_TEMP,PROBE_1x3,PinHeader_1x03_P2.54mm_Vertical,C49257,BOOMELE,2.54-1*3P,Optional remote DS18B20 header GND/DQ/VDD,zu bestellen,yes https://www.lcsc.com/product-detail/C49257.html
+F1,PTC_3A_30V,Fuse_1812_4532Metric,C48985875,LUTE,1812L300/30GR,PPTC 30V 3A hold on 12V input,zu bestellen,yes https://www.lcsc.com/product-detail/C48985875.html
+D_REV,SS34,D_SMA,C8678,MDD,SS34,Reverse-polarity crowbar Schottky,zu bestellen,yes https://www.lcsc.com/product-detail/C8678.html
+D_TVS,SMAJ15A,D_SMA,C148216,Littelfuse,SMAJ15A,TVS 15V on 12V rail,zu bestellen,yes https://www.lcsc.com/product-detail/C148216.html
+C_BULK,10u,C_0805_2012Metric,C15850,Samsung,CL21A106KAYNNNE,10uF 25V bulk 12V,zu bestellen,yes https://www.lcsc.com/product-detail/C15850.html
+C_3V3,100n,C_0603_1608Metric,C1591,Samsung,CL10B104KB8NNNC,100nF 3V3 decouple,zu bestellen,yes https://www.lcsc.com/product-detail/C1591.html
+Q1,AO3400A,SOT-23,C20917,AOS,AO3400A,N-MOSFET PWM signal low-side ch1,zu bestellen,yes https://www.lcsc.com/product-detail/C20917.html
+Q2,AO3400A,SOT-23,C20917,AOS,AO3400A,N-MOSFET PWM signal low-side ch2,zu bestellen,yes https://www.lcsc.com/product-detail/C20917.html
+Q3,AO3400A,SOT-23,C20917,AOS,AO3400A,N-MOSFET PWM signal low-side ch3,zu bestellen,yes https://www.lcsc.com/product-detail/C20917.html
+Q4,AO3400A,SOT-23,C20917,AOS,AO3400A,N-MOSFET PWM signal low-side ch4,zu bestellen,yes https://www.lcsc.com/product-detail/C20917.html
+R1A,100,R_0603_1608Metric,C22775,UNI-ROYAL,0603WAF1000T5E,Gate series ch1,zu bestellen,yes https://www.lcsc.com/product-detail/C22775.html
+R2A,100,R_0603_1608Metric,C22775,UNI-ROYAL,0603WAF1000T5E,Gate series ch2,zu bestellen,yes https://www.lcsc.com/product-detail/C22775.html
+R3A,100,R_0603_1608Metric,C22775,UNI-ROYAL,0603WAF1000T5E,Gate series ch3,zu bestellen,yes https://www.lcsc.com/product-detail/C22775.html
+R4A,100,R_0603_1608Metric,C22775,UNI-ROYAL,0603WAF1000T5E,Gate series ch4,zu bestellen,yes https://www.lcsc.com/product-detail/C22775.html
+R1B,100k,R_0603_1608Metric,C25803,UNI-ROYAL,0603WAF1003T5E,Gate pulldown failsafe ch1,vorhanden WHIN Elektro-Module-Kiste-2 R1-F6 (100x 100k Metallfilm),yes https://www.lcsc.com/product-detail/C25803.html
+R2B,100k,R_0603_1608Metric,C25803,UNI-ROYAL,0603WAF1003T5E,Gate pulldown failsafe ch2,vorhanden WHIN Elektro-Module-Kiste-2 R1-F6,yes https://www.lcsc.com/product-detail/C25803.html
+R3B,100k,R_0603_1608Metric,C25803,UNI-ROYAL,0603WAF1003T5E,Gate pulldown failsafe ch3,vorhanden WHIN Elektro-Module-Kiste-2 R1-F6,yes https://www.lcsc.com/product-detail/C25803.html
+R4B,100k,R_0603_1608Metric,C25803,UNI-ROYAL,0603WAF1003T5E,Gate pulldown failsafe ch4,vorhanden WHIN Elektro-Module-Kiste-2 R1-F6,yes https://www.lcsc.com/product-detail/C25803.html
+R1C,10k,R_0603_1608Metric,C25804,UNI-ROYAL,0603WAF1002T5E,Tach pull-up 3V3 ch1,zu bestellen,yes https://www.lcsc.com/product-detail/C25804.html
+R2C,10k,R_0603_1608Metric,C25804,UNI-ROYAL,0603WAF1002T5E,Tach pull-up 3V3 ch2,zu bestellen,yes https://www.lcsc.com/product-detail/C25804.html
+R3C,10k,R_0603_1608Metric,C25804,UNI-ROYAL,0603WAF1002T5E,Tach pull-up 3V3 ch3,zu bestellen,yes https://www.lcsc.com/product-detail/C25804.html
+R4C,10k,R_0603_1608Metric,C25804,UNI-ROYAL,0603WAF1002T5E,Tach pull-up 3V3 ch4,zu bestellen,yes https://www.lcsc.com/product-detail/C25804.html
+R1D,1k,R_0603_1608Metric,C21190,UNI-ROYAL,0603WAF1001T5E,Tach series ch1,zu bestellen,yes https://www.lcsc.com/product-detail/C21190.html
+R2D,1k,R_0603_1608Metric,C21190,UNI-ROYAL,0603WAF1001T5E,Tach series ch2,zu bestellen,yes https://www.lcsc.com/product-detail/C21190.html
+R3D,1k,R_0603_1608Metric,C21190,UNI-ROYAL,0603WAF1001T5E,Tach series ch3,zu bestellen,yes https://www.lcsc.com/product-detail/C21190.html
+R4D,1k,R_0603_1608Metric,C21190,UNI-ROYAL,0603WAF1001T5E,Tach series ch4,zu bestellen,yes https://www.lcsc.com/product-detail/C21190.html
+D1,BAT54S,SOT-23,C83935,ST(Semtech),BAT54S,Tach clamp to 3V3 ch1,zu bestellen,yes https://www.lcsc.com/product-detail/C83935.html
+D2,BAT54S,SOT-23,C83935,ST(Semtech),BAT54S,Tach clamp to 3V3 ch2,zu bestellen,yes https://www.lcsc.com/product-detail/C83935.html
+D3,BAT54S,SOT-23,C83935,ST(Semtech),BAT54S,Tach clamp to 3V3 ch3,zu bestellen,yes https://www.lcsc.com/product-detail/C83935.html
+D4,BAT54S,SOT-23,C83935,ST(Semtech),BAT54S,Tach clamp to 3V3 ch4,zu bestellen,yes https://www.lcsc.com/product-detail/C83935.html
+R_TEMP,4.7k,R_0603_1608Metric,C23162,UNI-ROYAL,0603WAF4701T5E,DS18B20 1-Wire pull-up,zu bestellen,yes https://www.lcsc.com/product-detail/C23162.html
+U_TEMP,DS18B20+,TO-92,C9753,MAXIM,DS18B20+,Heatsink temperature 1-Wire,vorhanden WHIN Elektro-Module-Kiste-2 R3-F4 (2x TO-92),yes https://www.lcsc.com/product-detail/C9753.html
+U_ESP,ESP32-C6-SuperMini,MODULE_SOCKETED,,,ESP32-C6 SuperMini,Plugged into J_ESP_*; not soldered,vorhanden WHIN Elektro-Module-Kiste1 R1-F1 (9x),module_stock_not_lcsc
+FILT_OPT,DC-EMI-Filter 0-50V/4A,offboard,,,optional series on 12V,Optional off-board EMI filter,vorhanden WHIN Elektro-Module-Kiste-2 R2-F6 (3x) — not on PCB footprint,stock_optional
