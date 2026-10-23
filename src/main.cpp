@@ -124,8 +124,9 @@ static void sampleTemperature() {
 
 static void printHelp() {
   Serial.println(F("Befehle (115200 Baud), 4 Kanaele + Temp:"));
-  Serial.println(F("  PWM <0-100>           alle Kanaele"));
+  Serial.println(F("  PWM 0 / PWM <5-100>   alle Kanaele"));
   Serial.println(F("  PWM <1-4> <0-100>     ein Kanal"));
+  Serial.println(F("  PWM ALL <0-100>       alle Kanaele (inkl. 1-4%)"));
   Serial.println(F("  RPM [1-4]             Drehzahl"));
   Serial.println(F("  TEMP                  Kuehlkoerper C"));
   Serial.println(F("  STATUS                PWM/RPM/Temp"));
@@ -152,41 +153,80 @@ static void handleLine(const char *line) {
   }
 
   if (strcmp(cmd, "pwm") == 0) {
-    char *end = nullptr;
-    const long a = strtol(line + n, &end, 10);
-    while (end && (*end == ' ' || *end == '\t')) {
-      end++;
+    const char *arg = line + n;
+    while (*arg == ' ' || *arg == '\t') {
+      arg++;
     }
-    if (end && *end != '\0') {
-      const long b = strtol(end, nullptr, 10);
-      if (a < 1 || a > FAN_COUNT) {
-        Serial.println(F("ERR Kanal 1-4"));
+    bool explicitAll = std::tolower(static_cast<unsigned char>(arg[0])) == 'a' &&
+                       std::tolower(static_cast<unsigned char>(arg[1])) == 'l' &&
+                       std::tolower(static_cast<unsigned char>(arg[2])) == 'l' &&
+                       (arg[3] == '\0' || arg[3] == ' ' || arg[3] == '\t');
+    if (explicitAll) {
+      arg += 3;
+      while (*arg == ' ' || *arg == '\t') {
+        arg++;
+      }
+      char *end = nullptr;
+      const long duty = strtol(arg, &end, 10);
+      while (end && (*end == ' ' || *end == '\t')) {
+        end++;
+      }
+      if (end == arg || !end || *end != '\0' || duty < 0 || duty > 100) {
+        Serial.println(F("ERR PWM Syntax"));
         return;
       }
-      int v = static_cast<int>(b);
-      if (v < 0) {
-        v = 0;
-      }
-      if (v > 100) {
-        v = 100;
-      }
-      setFanDutyPercent(static_cast<uint8_t>(a - 1), static_cast<unsigned>(v));
-      Serial.print(F("OK PWM"));
-      Serial.print(a);
-      Serial.print(F(" "));
-      Serial.println(v);
+      setAllFans(static_cast<unsigned>(duty));
+      Serial.print(F("OK PWM ALL "));
+      Serial.println(duty);
       return;
     }
-    int v = static_cast<int>(a);
-    if (v < 0) {
-      v = 0;
+
+    char *end = nullptr;
+    const long first = strtol(arg, &end, 10);
+    if (end == arg) {
+      Serial.println(F("ERR PWM Syntax"));
+      return;
     }
-    if (v > 100) {
-      v = 100;
+    while (*end == ' ' || *end == '\t') {
+      end++;
     }
-    setAllFans(static_cast<unsigned>(v));
-    Serial.print(F("OK PWM ALL "));
-    Serial.println(v);
+    if (*end == '\0') {
+      if (first >= 1 && first <= FAN_COUNT) {
+        Serial.println(F("ERR PWM duty required for channel"));
+        return;
+      }
+      if (first < 0 || first > 100) {
+        Serial.println(F("ERR PWM range 0-100"));
+        return;
+      }
+      setAllFans(static_cast<unsigned>(first));
+      Serial.print(F("OK PWM ALL "));
+      Serial.println(first);
+      return;
+    }
+
+    if (first < 1 || first > FAN_COUNT) {
+      Serial.println(F("ERR Kanal 1-4"));
+      return;
+    }
+    char *dutyEnd = nullptr;
+    const long duty = strtol(end, &dutyEnd, 10);
+    if (dutyEnd == end) {
+      Serial.println(F("ERR PWM Syntax"));
+      return;
+    }
+    while (*dutyEnd == ' ' || *dutyEnd == '\t') {
+      dutyEnd++;
+    }
+    if (*dutyEnd != '\0' || duty < 0 || duty > 100) {
+      Serial.println(F("ERR PWM Syntax"));
+      return;
+    }
+    setFanDutyPercent(static_cast<uint8_t>(first - 1), static_cast<unsigned>(duty));
+    Serial.print(F("OK PWM"));
+    Serial.print(first);
+    Serial.print(F(" "));
+    Serial.println(duty);
     return;
   }
 

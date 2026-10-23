@@ -22,12 +22,16 @@ Baud **115200**. Pins in `include/config.h` (PWM 0/1/2/3, Tach 20/19/18/14, Temp
 
 | Befehl | Wirkung |
 |--------|---------|
-| `PWM <0-100>` | alle Kanaele |
+| `PWM 0` / `PWM <5-100>` | alle Kanaele |
+| `PWM ALL <0-100>` | alle Kanaele, auch bei 1-4% |
 | `PWM <1-4> <0-100>` | ein Kanal |
 | `RPM` / `RPM <1-4>` | Drehzahl |
 | `TEMP` | DS18B20 °C |
 | `STATUS` | PWM, RPM, Temp |
 | `HELP` | Hilfe |
+
+Unvollstaendige oder fehlerhafte `PWM`-Argumente werden abgelehnt, ohne die
+Luefterwerte zu aendern. Ein einzelnes `PWM 1` ist daher kein All-Kanaele-Befehl.
 
 ## Bestellbares PCB (v2)
 
