@@ -8,7 +8,5 @@
 - `kicad/esp32-c6-pwm-4ch.kicad_pcb`
 - `scripts/build_pcb.py`
 
-Schaltung: `../../writeup.md` Teil B.
-
-Am 1-Wire-Bus darf immer nur ein DS18B20 angeschlossen sein: entweder der onboard
-Sensor U_TEMP oder eine externe Sonde an J_TEMP, niemals beide gleichzeitig.
+Schaltung und 1-Wire-Anschlussregel: `../../writeup.md` Teil B; Bestückung und
+Anschluss der Sensorvarianten: `HAND_SOLDER.md`.
