@@ -42,6 +42,16 @@ static uint8_t s_dutyPercent[FAN_COUNT];
 static float s_lastRpm[FAN_COUNT];
 static float s_lastTempC = NAN;
 static bool s_tempOk = false;
+static constexpr uint32_t AUTO_TEMP_SAMPLE_MS = 1000;
+static constexpr uint32_t MANUAL_OVERRIDE_MS = 5UL * 60UL * 1000UL;
+static constexpr float TEMP_HYSTERESIS_C = 2.0f;
+static constexpr float TEMP_BAND_C[] = {40.0f, 45.0f, 50.0f, 55.0f};
+static constexpr uint8_t FAN_AUTO_DUTY[] = {35, 50, 65, 80, 100};
+static uint8_t s_autoBand = 0;
+static uint8_t s_manualDutyPercent[FAN_COUNT];
+static uint32_t s_manualOverrideUntil[FAN_COUNT];
+static bool s_manualActive[FAN_COUNT] = {false};
+static uint32_t s_nextTempSampleMs = 0;
 
 static void setupPwm() {
   for (uint8_t i = 0; i < FAN_COUNT; i++) {
@@ -66,6 +76,52 @@ static void setFanDutyPercent(uint8_t ch, unsigned percent) {
 static void setAllFans(unsigned percent) {
   for (uint8_t i = 0; i < FAN_COUNT; i++) {
     setFanDutyPercent(i, percent);
+  }
+}
+
+static uint8_t automaticDutyForTemperature(float temperatureC) {
+  while (s_autoBand < 4 && temperatureC >= TEMP_BAND_C[s_autoBand]) {
+    s_autoBand++;
+  }
+  while (s_autoBand > 0 && temperatureC < TEMP_BAND_C[s_autoBand - 1] - TEMP_HYSTERESIS_C) {
+    s_autoBand--;
+  }
+  return FAN_AUTO_DUTY[s_autoBand];
+}
+
+static bool manualOverrideActive(uint8_t ch, uint32_t now) {
+  return s_manualActive[ch] && static_cast<int32_t>(s_manualOverrideUntil[ch] - now) > 0;
+}
+
+static void applyFanControl(uint32_t now) {
+  if (!s_tempOk) {
+    setAllFans(100);
+    return;
+  }
+  const unsigned automaticDuty = automaticDutyForTemperature(s_lastTempC);
+  for (uint8_t i = 0; i < FAN_COUNT; i++) {
+    if (manualOverrideActive(i, now)) {
+      setFanDutyPercent(i, s_manualDutyPercent[i]);
+    } else {
+      s_manualActive[i] = false;
+      setFanDutyPercent(i, automaticDuty);
+    }
+  }
+}
+
+static void setManualFanDutyPercent(uint8_t ch, unsigned percent) {
+  if (ch >= FAN_COUNT) {
+    return;
+  }
+  s_manualDutyPercent[ch] = static_cast<uint8_t>(percent > 100 ? 100 : percent);
+  s_manualActive[ch] = true;
+  s_manualOverrideUntil[ch] = millis() + MANUAL_OVERRIDE_MS;
+  applyFanControl(millis());
+}
+
+static void setManualAllFans(unsigned percent) {
+  for (uint8_t i = 0; i < FAN_COUNT; i++) {
+    setManualFanDutyPercent(i, percent);
   }
 }
 
@@ -113,7 +169,7 @@ static void updateRpmEstimate() {
 
 static void sampleTemperature() {
   float t = 0;
-  if (!ds18b20::readCelsius(PIN_TEMP_DQ, &t)) {
+  if (!ds18b20::readCelsius(PIN_TEMP_DQ, &t) || !(t >= -55.0f && t <= 125.0f)) {
     s_tempOk = false;
     s_lastTempC = NAN;
     return;
@@ -127,6 +183,7 @@ static void printHelp() {
   Serial.println(F("  PWM 0 / PWM <5-100>   alle Kanaele"));
   Serial.println(F("  PWM <1-4> <0-100>     ein Kanal"));
   Serial.println(F("  PWM ALL <0-100>       alle Kanaele (inkl. 1-4%)"));
+  Serial.println(F("  PWM setzt Handbetrieb fuer 5 Minuten"));
   Serial.println(F("  RPM [1-4]             Drehzahl"));
   Serial.println(F("  TEMP                  Kuehlkoerper C"));
   Serial.println(F("  STATUS                PWM/RPM/Temp"));
@@ -175,7 +232,7 @@ static void handleLine(const char *line) {
         Serial.println(F("ERR PWM Syntax"));
         return;
       }
-      setAllFans(static_cast<unsigned>(duty));
+      setManualAllFans(static_cast<unsigned>(duty));
       Serial.print(F("OK PWM ALL "));
       Serial.println(duty);
       return;
@@ -199,7 +256,7 @@ static void handleLine(const char *line) {
         Serial.println(F("ERR PWM range 0-100"));
         return;
       }
-      setAllFans(static_cast<unsigned>(first));
+      setManualAllFans(static_cast<unsigned>(first));
       Serial.print(F("OK PWM ALL "));
       Serial.println(first);
       return;
@@ -222,7 +279,7 @@ static void handleLine(const char *line) {
       Serial.println(F("ERR PWM Syntax"));
       return;
     }
-    setFanDutyPercent(static_cast<uint8_t>(first - 1), static_cast<unsigned>(duty));
+    setManualFanDutyPercent(static_cast<uint8_t>(first - 1), static_cast<unsigned>(duty));
     Serial.print(F("OK PWM"));
     Serial.print(first);
     Serial.print(F(" "));
@@ -263,6 +320,7 @@ static void handleLine(const char *line) {
 
   if (strcmp(cmd, "temp") == 0) {
     sampleTemperature();
+    applyFanControl(millis());
     if (!s_tempOk) {
       Serial.println(F("TEMP ERR"));
       return;
@@ -274,13 +332,22 @@ static void handleLine(const char *line) {
 
   if (strcmp(cmd, "status") == 0) {
     sampleTemperature();
+    applyFanControl(millis());
     for (uint8_t i = 0; i < FAN_COUNT; i++) {
       Serial.print(F("CH"));
       Serial.print(i + 1);
       Serial.print(F(" PWM "));
       Serial.print(s_dutyPercent[i]);
       Serial.print(F("% RPM "));
-      Serial.println(s_lastRpm[i], 0);
+      Serial.print(s_lastRpm[i], 0);
+      Serial.print(F(" "));
+      if (!s_tempOk) {
+        Serial.println(F("FAILSAFE"));
+      } else if (manualOverrideActive(i, millis())) {
+        Serial.println(F("MANUAL"));
+      } else {
+        Serial.println(F("AUTO"));
+      }
     }
     if (s_tempOk) {
       Serial.print(F("TEMP "));
@@ -313,6 +380,9 @@ void setup() {
   setupPwm();
   setAllFans(DEFAULT_FAN_PERCENT);
   pinMode(PIN_TEMP_DQ, INPUT_PULLUP);
+  for (uint8_t i = 0; i < FAN_COUNT; i++) {
+    s_manualDutyPercent[i] = DEFAULT_FAN_PERCENT;
+  }
 
   Serial.println();
   Serial.println(F("ESP32-C6 USB PWM/Tacho 4ch + Temp — bereit"));
@@ -321,6 +391,13 @@ void setup() {
 
 void loop() {
   updateRpmEstimate();
+
+  const uint32_t now = millis();
+  if (static_cast<int32_t>(now - s_nextTempSampleMs) >= 0) {
+    sampleTemperature();
+    applyFanControl(millis());
+    s_nextTempSampleMs = millis() + AUTO_TEMP_SAMPLE_MS;
+  }
 
   static String buf;
   while (Serial.available() > 0) {

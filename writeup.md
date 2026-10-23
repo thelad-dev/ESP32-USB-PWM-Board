@@ -214,7 +214,9 @@ Platine: 90 mm × 70 mm, 2 Layer. GND als explizite Tracks (kein automatisches Z
 
 ### 19. Firmware v2
 
-PlatformIO-Env `esp32-c6-supermini`. Befehle: `PWM`, `RPM`, `TEMP`, `STATUS` (siehe README). Eine automatische Temperaturregelung (Temp→Duty-Kurve) ist **nicht Bestandteil dieser Lieferung** und bleibt Folgearbeit; die Firmware liest die Temperatur und setzt vier Kanaele per seriellen `PWM`-Befehl.
+PlatformIO-Env `esp32-c6-supermini`. Befehle: `PWM`, `RPM`, `TEMP`, `STATUS` (siehe README). Im Automatikbetrieb wird die Temperatur einmal pro Regelzyklus gelesen und auf alle vier Kanaele angewendet: unter 40 °C 35 %, ab 40/45/50/55 °C 50/65/80/100 %. Beim Abkuehlen bleibt die aktuelle Stufe bis 2 °C unter der jeweiligen Einschaltschwelle erhalten. 35 % ist die Mindestvorgabe.
+
+Ein gueltiger serieller `PWM`-Befehl uebernimmt den betroffenen Kanal beziehungsweise alle Kanaele fuer fuenf Minuten; danach faellt jeder betroffene Kanal automatisch auf die Temperaturkurve zurueck. Ein fehlender oder ungueltiger DS18B20-Wert setzt alle Kanaele unverzueglich auf 100 % und hat Vorrang vor dem Handbetrieb. Sobald wieder ein gueltiger Temperaturwert vorliegt, gilt ein noch laufender Handbetrieb weiter; andernfalls wird automatisch geregelt. `STATUS` kennzeichnet die Kanaele mit `AUTO`, `MANUAL` oder `FAILSAFE`.
 
 ### 20. Checkliste Inbetriebnahme v2
 

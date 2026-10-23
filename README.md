@@ -22,9 +22,9 @@ Baud **115200**. Pins in `include/config.h` (PWM 0/1/2/3, Tach 20/19/18/14, Temp
 
 | Befehl | Wirkung |
 |--------|---------|
-| `PWM 0` / `PWM <5-100>` | alle Kanaele |
-| `PWM ALL <0-100>` | alle Kanaele, auch bei 1-4% |
-| `PWM <1-4> <0-100>` | ein Kanal |
+| `PWM 0` / `PWM <5-100>` | Handbetrieb fuer alle Kanaele, 5 Minuten |
+| `PWM ALL <0-100>` | Handbetrieb fuer alle Kanaele, auch bei 1-4%, 5 Minuten |
+| `PWM <1-4> <0-100>` | ein Kanal im Handbetrieb fuer 5 Minuten |
 | `RPM` / `RPM <1-4>` | Drehzahl |
 | `TEMP` | DS18B20 °C |
 | `STATUS` | PWM, RPM, Temp |
@@ -32,6 +32,12 @@ Baud **115200**. Pins in `include/config.h` (PWM 0/1/2/3, Tach 20/19/18/14, Temp
 
 Unvollstaendige oder fehlerhafte `PWM`-Argumente werden abgelehnt, ohne die
 Luefterwerte zu aendern. Ein einzelnes `PWM 1` ist daher kein All-Kanaele-Befehl.
+
+Im Automatikbetrieb gilt eine stufige Temperaturkurve: unter 40 °C 35 %, ab
+40/45/50/55 °C 50/65/80/100 %. Beim Abkuehlen wird jede Stufe erst 2 °C unter
+ihrer Einschaltschwelle verlassen. 35 % ist die Mindestvorgabe. Ein fehlender
+oder ungueltiger Sensorwert setzt alle Kanaele sofort auf 100 % und uebersteuert
+auch den Handbetrieb. `STATUS` zeigt `AUTO`, `MANUAL` oder `FAILSAFE` pro Kanal.
 
 ## Bestellbares PCB (v2)
 
