@@ -232,11 +232,16 @@ static void handleLine(const char *line) {
 
   if (strcmp(cmd, "rpm") == 0 || strcmp(cmd, "?") == 0) {
     if (line[n] != '\0') {
-      const int ch = atoi(line + n);
-      if (ch < 1 || ch > FAN_COUNT) {
+      char *end = nullptr;
+      const long parsed = strtol(line + n, &end, 10);
+      while (end && (*end == ' ' || *end == '\t')) {
+        end++;
+      }
+      if (end == line + n || !end || *end != '\0' || parsed < 1 || parsed > FAN_COUNT) {
         Serial.println(F("ERR Kanal 1-4"));
         return;
       }
+      const int ch = static_cast<int>(parsed);
       Serial.print(F("RPM"));
       Serial.print(ch);
       Serial.print(F(" "));
