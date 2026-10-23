@@ -1,0 +1,9 @@
+Reference,Value,Footprint,LCSC,Manufacturer,Part Number,Description
+U1,ESP32-DevKitC-32E,MODULE_ESP32_DEVKITC,,Espressif,ESP32-DevKitC,MCU + USB-Serial
+Q1,IRLZ44NPBF,TO-220-3_Vertical,,Infineon,IRLZ44NPBF,Logic N-MOSFET PWM low-side
+R1,100,R_0603_1608Metric,,,100R,Gate series resistor
+R2,100k,R_0603_1608Metric,,,100k,Gate pulldown
+R3,10k,R_0603_1608Metric,,,10k,Tach pull-up to 3V3
+J1,FAN_4PIN,PinHeader_1x04_P2.54mm,,,Fan 4-pin,4-pin fan connector
+C1,100n,C_0603_1608Metric,,,100n,Decoupling 3V3 optional
+C2,10u,C_0805_2012Metric,,,10u,Optional bulk 12V input
