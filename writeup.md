@@ -179,7 +179,7 @@ ESP-Versorgung weiter ueber USB am Modul (kein 12→3V3-Regler auf dem Board).
 
 - 4× 2510-4A / 2,54 mm 4-Pin-Header (PC-Luefter-kompatibel), Pin 1=+12V … 4=PWM.
 - 1× Schraubklemme 5,08 mm 2P fuer 12 V / GND.
-- 2× Female 1×8 fuer C3 SuperMini.
+- 2× Female 1×10 fuer C6 SuperMini.
 - 1× 1×3 fuer optionale Temp-Sonde.
 
 ### 17. Blockschaltbild v2 (ein Kanal stellvertretend)

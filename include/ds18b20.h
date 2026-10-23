@@ -60,6 +60,22 @@ inline uint8_t readByte(uint8_t pin) {
   return v;
 }
 
+inline uint8_t crc8(const uint8_t *data, uint8_t length) {
+  uint8_t crc = 0;
+  for (uint8_t i = 0; i < length; i++) {
+    uint8_t value = data[i];
+    for (uint8_t bit = 0; bit < 8; bit++) {
+      const uint8_t mix = (crc ^ value) & 0x01;
+      crc >>= 1;
+      if (mix) {
+        crc ^= 0x8C;
+      }
+      value >>= 1;
+    }
+  }
+  return crc;
+}
+
 // Returns true and writes Celsius, or false on bus/sensor error.
 inline bool readCelsius(uint8_t pin, float *outC) {
   if (!reset(pin)) {
@@ -74,9 +90,14 @@ inline bool readCelsius(uint8_t pin, float *outC) {
   }
   writeByte(pin, 0xCC);
   writeByte(pin, 0xBE); // READ SCRATCHPAD
-  const uint8_t lsb = readByte(pin);
-  const uint8_t msb = readByte(pin);
-  const int16_t raw = static_cast<int16_t>((static_cast<uint16_t>(msb) << 8) | lsb);
+  uint8_t scratchpad[9];
+  for (uint8_t i = 0; i < 9; i++) {
+    scratchpad[i] = readByte(pin);
+  }
+  if (crc8(scratchpad, 8) != scratchpad[8]) {
+    return false;
+  }
+  const int16_t raw = static_cast<int16_t>((static_cast<uint16_t>(scratchpad[1]) << 8) | scratchpad[0]);
   *outC = static_cast<float>(raw) / 16.0f;
   return true;
 }
