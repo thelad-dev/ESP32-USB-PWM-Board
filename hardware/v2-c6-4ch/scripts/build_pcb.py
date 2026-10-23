@@ -487,11 +487,50 @@ def build() -> str:
         connect_pads(
             board, jfan.FindPadByNumber("3"), fps[f"R{i+1}D"].FindPadByNumber("1"), 0.25, F_Cu, tach_nets[i]
         )
-        connect_pads(board, c_bulk.FindPadByNumber("1"), jfan.FindPadByNumber("1"), 0.5, F_Cu, p12f)
+
+    bulk_x, bulk_y = pad_xy(c_bulk.FindPadByNumber("1"))
+    fan4_x, fan4_y = pad_xy(fps["J_FAN4"].FindPadByNumber("1"))
+    add_track(board, bulk_x, bulk_y, bulk_x, 2.0, 0.5, F_Cu, p12f)
+    add_via(board, bulk_x, 2.0, p12f)
+    p12_route = [(bulk_x, 2.0), (86.0, 2.0), (86.0, fan4_y), (fan4_x, fan4_y)]
+    for first, second in zip(p12_route, p12_route[1:]):
+        add_track(board, *first, *second, 0.5, B_Cu, p12f)
+    for i in range(3, 0, -1):
+        connect_pads(
+            board,
+            fps[f"J_FAN{i+1}"].FindPadByNumber("1"),
+            fps[f"J_FAN{i}"].FindPadByNumber("1"),
+            0.5,
+            B_Cu,
+            p12f,
+        )
 
     # Temp to ESP IO21 stamp socket
     connect_pads(board, j_io21.FindPadByNumber("1"), u_temp.FindPadByNumber("2"), 0.25, F_Cu, temp)
     connect_pads(board, r_temp.FindPadByNumber("2"), u_temp.FindPadByNumber("2"), 0.25, F_Cu, temp)
+    j_temp_dq_x, j_temp_dq_y = pad_xy(j_temp.FindPadByNumber("2"))
+    r_temp_dq_x, r_temp_dq_y = pad_xy(r_temp.FindPadByNumber("2"))
+    probe_dq_route = [
+        (j_temp_dq_x, j_temp_dq_y),
+        (83.0, j_temp_dq_y),
+        (83.0, r_temp_dq_y),
+        (r_temp_dq_x, r_temp_dq_y),
+    ]
+    for first, second in zip(probe_dq_route, probe_dq_route[1:]):
+        add_track(board, *first, *second, 0.25, F_Cu, temp)
+
+    probe_3v3_x, probe_3v3_y = pad_xy(j_temp.FindPadByNumber("3"))
+    dec_3v3_x, dec_3v3_y = pad_xy(c_dec.FindPadByNumber("1"))
+    probe_3v3_route = [
+        (probe_3v3_x, probe_3v3_y),
+        (83.0, probe_3v3_y),
+        (83.0, 4.0),
+        (dec_3v3_x, 4.0),
+        (dec_3v3_x, dec_3v3_y),
+    ]
+    for first, second in zip(probe_3v3_route, probe_3v3_route[1:]):
+        add_track(board, *first, *second, 0.35, B_Cu, p3v3)
+    add_via(board, dec_3v3_x, dec_3v3_y, p3v3)
 
     # 3V3 from ESP socket (right pad 3) to pullups / sensor
     connect_pads(board, j_right.FindPadByNumber("3"), c_dec.FindPadByNumber("1"), 0.35, F_Cu, p3v3)
@@ -508,13 +547,25 @@ def build() -> str:
     connect_pads_bottom(board, gnd_hub, j_temp.FindPadByNumber("1"), 0.4, gnd)
     for i in range(4):
         connect_pads_bottom(
-            board, gnd_hub, fps[f"J_FAN{i+1}"].FindPadByNumber("2"), 0.5, gnd
-        )
-        connect_pads_bottom(
             board, gnd_hub, fps[f"Q{i+1}"].FindPadByNumber("2"), 0.4, gnd
         )
         connect_pads_bottom(
             board, gnd_hub, fps[f"R{i+1}B"].FindPadByNumber("2"), 0.3, gnd
+        )
+
+    gnd_x, gnd_y = pad_xy(gnd_hub)
+    fan4_gnd_x, fan4_gnd_y = pad_xy(fps["J_FAN4"].FindPadByNumber("2"))
+    gnd_route = [(gnd_x, gnd_y), (5.0, 12.0), (5.0, 68.0), (76.0, 68.0), (76.0, fan4_gnd_y), (fan4_gnd_x, fan4_gnd_y)]
+    for first, second in zip(gnd_route, gnd_route[1:]):
+        add_track(board, *first, *second, 0.5, B_Cu, gnd)
+    for i in range(3, 0, -1):
+        connect_pads(
+            board,
+            fps[f"J_FAN{i+1}"].FindPadByNumber("2"),
+            fps[f"J_FAN{i}"].FindPadByNumber("2"),
+            0.5,
+            B_Cu,
+            gnd,
         )
 
     # 3V3 to channel tach pull-ups
