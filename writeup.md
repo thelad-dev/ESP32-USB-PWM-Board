@@ -121,7 +121,7 @@ Entscheidung: **DS18B20+ (TO-92, LCSC C9753)** am Kuehlkoerper, optional ueber 3
 
 Begruendung gegen NTC: keine Widerstandsteiler-Kalibrierung, digitale °C-Werte, wasserdichte Sonden ueblich, ein GPIO reicht, ±0,5 °C reicht fuer Luefterkurven am Kuehlkoerper (keine Laborgenauigkeit noetig). NTC waere billiger, braucht aber ADC und Kalibrierung.
 
-Beschaltung: VDD→3V3, GND→GND, DQ→GPIO21 mit 4,7 kΩ Pull-up. Onboard TO-92 und paralleler Header `J_TEMP` (GND / DQ / 3V3).
+Beschaltung: VDD→3V3, GND→GND, DQ→GPIO21 mit 4,7 kΩ Pull-up. Onboard TO-92 und paralleler Header `J_TEMP` (GND / DQ / 3V3) teilen einen Bus; es darf immer nur einer von beiden DS18B20 angeschlossen sein.
 
 ### 11b. Bestand: MOSFET-Modul und Levelshifter
 

@@ -124,8 +124,12 @@ def add_track(board: BOARD, x1, y1, x2, y2, width_mm, layer, net) -> None:
 
 
 def add_via(board: BOARD, x, y, net, diameter=0.8, drill=0.4) -> None:
+    position = mm(x, y)
+    for item in board.GetTracks():
+        if isinstance(item, PCB_VIA) and item.GetNetCode() == net.GetNetCode() and item.GetPosition() == position:
+            return
     v = PCB_VIA(board)
-    v.SetPosition(mm(x, y))
+    v.SetPosition(position)
     v.SetWidth(FromMM(diameter))
     v.SetDrill(FromMM(drill))
     v.SetNet(net)
@@ -157,6 +161,14 @@ def connect_pads(board, pad_a: PAD, pad_b: PAD, width_mm, layer, net, via_at=Non
         add_track(board, ax, ay, vx, vy, width_mm, layer, net)
         add_via(board, vx, vy, net)
         add_track(board, vx, vy, bx, by, width_mm, B_Cu if layer == F_Cu else F_Cu, net)
+
+
+def connect_pads_bottom(board, pad_a: PAD, pad_b: PAD, width_mm, net):
+    ax, ay = pad_xy(pad_a)
+    bx, by = pad_xy(pad_b)
+    add_via(board, ax, ay, net)
+    add_via(board, bx, by, net)
+    add_track(board, ax, ay, bx, by, width_mm, B_Cu, net)
 
 
 def fill_gnd_zone(board: BOARD, net) -> None:
@@ -475,7 +487,6 @@ def build() -> str:
         connect_pads(
             board, jfan.FindPadByNumber("3"), fps[f"R{i+1}D"].FindPadByNumber("1"), 0.25, F_Cu, tach_nets[i]
         )
-        # +12V to fan
         connect_pads(board, c_bulk.FindPadByNumber("1"), jfan.FindPadByNumber("1"), 0.5, F_Cu, p12f)
 
     # Temp to ESP IO21 stamp socket
@@ -486,25 +497,24 @@ def build() -> str:
     connect_pads(board, j_right.FindPadByNumber("3"), c_dec.FindPadByNumber("1"), 0.35, F_Cu, p3v3)
     connect_pads(board, c_dec.FindPadByNumber("1"), r_temp.FindPadByNumber("1"), 0.35, F_Cu, p3v3)
 
-    # Explicit GND bus (no copper pour: ZONE_FILLER SIGSEGVs headless in KiCad 6.0.11)
     fps = {fp.GetReference(): fp for fp in board.GetFootprints()}
     gnd_hub = j_pwr.FindPadByNumber("2")
-    connect_pads(board, gnd_hub, j_right.FindPadByNumber("2"), 0.5, F_Cu, gnd)
-    connect_pads(board, gnd_hub, d_rev.FindPadByNumber("1"), 0.5, F_Cu, gnd)
-    connect_pads(board, gnd_hub, d_tvs.FindPadByNumber("1"), 0.5, F_Cu, gnd)
-    connect_pads(board, gnd_hub, c_bulk.FindPadByNumber("2"), 0.5, F_Cu, gnd)
-    connect_pads(board, gnd_hub, c_dec.FindPadByNumber("2"), 0.4, F_Cu, gnd)
-    connect_pads(board, gnd_hub, u_temp.FindPadByNumber("1"), 0.4, F_Cu, gnd)
-    connect_pads(board, gnd_hub, j_temp.FindPadByNumber("1"), 0.4, F_Cu, gnd)
+    connect_pads_bottom(board, gnd_hub, j_right.FindPadByNumber("2"), 0.5, gnd)
+    connect_pads_bottom(board, gnd_hub, d_rev.FindPadByNumber("1"), 0.5, gnd)
+    connect_pads_bottom(board, gnd_hub, d_tvs.FindPadByNumber("1"), 0.5, gnd)
+    connect_pads_bottom(board, gnd_hub, c_bulk.FindPadByNumber("2"), 0.5, gnd)
+    connect_pads_bottom(board, gnd_hub, c_dec.FindPadByNumber("2"), 0.4, gnd)
+    connect_pads_bottom(board, gnd_hub, u_temp.FindPadByNumber("1"), 0.4, gnd)
+    connect_pads_bottom(board, gnd_hub, j_temp.FindPadByNumber("1"), 0.4, gnd)
     for i in range(4):
-        connect_pads(
-            board, gnd_hub, fps[f"J_FAN{i+1}"].FindPadByNumber("2"), 0.5, F_Cu, gnd
+        connect_pads_bottom(
+            board, gnd_hub, fps[f"J_FAN{i+1}"].FindPadByNumber("2"), 0.5, gnd
         )
-        connect_pads(
-            board, gnd_hub, fps[f"Q{i+1}"].FindPadByNumber("2"), 0.4, F_Cu, gnd
+        connect_pads_bottom(
+            board, gnd_hub, fps[f"Q{i+1}"].FindPadByNumber("2"), 0.4, gnd
         )
-        connect_pads(
-            board, gnd_hub, fps[f"R{i+1}B"].FindPadByNumber("2"), 0.3, F_Cu, gnd
+        connect_pads_bottom(
+            board, gnd_hub, fps[f"R{i+1}B"].FindPadByNumber("2"), 0.3, gnd
         )
 
     # 3V3 to channel tach pull-ups

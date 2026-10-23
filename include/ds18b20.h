@@ -77,6 +77,7 @@ inline uint8_t crc8(const uint8_t *data, uint8_t length) {
 }
 
 // Returns true and writes Celsius, or false on bus/sensor error.
+// Only one DS18B20 may be connected: onboard U_TEMP or external J_TEMP, never both.
 inline bool readCelsius(uint8_t pin, float *outC) {
   if (!reset(pin)) {
     return false;

@@ -9,3 +9,6 @@
 - `scripts/build_pcb.py`
 
 Schaltung: `../../writeup.md` Teil B.
+
+Am 1-Wire-Bus darf immer nur ein DS18B20 angeschlossen sein: entweder der onboard
+Sensor U_TEMP oder eine externe Sonde an J_TEMP, niemals beide gleichzeitig.
