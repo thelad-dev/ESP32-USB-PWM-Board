@@ -214,7 +214,7 @@ Platine: 90 mm × 70 mm, 2 Layer. GND als explizite Tracks (kein automatisches Z
 
 ### 19. Firmware v2
 
-PlatformIO-Env `esp32-c6-supermini`. Befehle: `PWM`, `RPM`, `TEMP`, `STATUS` (siehe README). Regelung (Temp→Duty-Kurve) ist **Folgearbeit**; Grundstock liest Temp und setzt vier Kanaele.
+PlatformIO-Env `esp32-c6-supermini`. Befehle: `PWM`, `RPM`, `TEMP`, `STATUS` (siehe README). Eine automatische Temperaturregelung (Temp→Duty-Kurve) ist **nicht Bestandteil dieser Lieferung** und bleibt Folgearbeit; die Firmware liest die Temperatur und setzt vier Kanaele per seriellen `PWM`-Befehl.
 
 ### 20. Checkliste Inbetriebnahme v2
 
