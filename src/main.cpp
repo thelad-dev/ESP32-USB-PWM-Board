@@ -363,7 +363,7 @@ static void handleLine(const char *line) {
     return;
   }
 
-  Serial.println(F("ERR unbekannt — HELP"));
+  Serial.println(F("ERR unbekannt - HELP"));
 }
 
 void setup() {
@@ -385,7 +385,7 @@ void setup() {
   }
 
   Serial.println();
-  Serial.println(F("ESP32-C6 USB PWM/Tacho 4ch + Temp — bereit"));
+  Serial.println(F("ESP32-C6 USB PWM/Tacho 4ch + Temp - bereit"));
   printHelp();
 }
 

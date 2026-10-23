@@ -40,4 +40,4 @@ D4,BAT54S,SOT-23,C83935,ST(Semtech),BAT54S,Tach clamp to 3V3 ch4,zu bestellen,ye
 R_TEMP,4.7k,R_0603_1608Metric,C23162,UNI-ROYAL,0603WAF4701T5E,DS18B20 1-Wire pull-up,zu bestellen,yes https://www.lcsc.com/product-detail/C23162.html
 U_TEMP,DS18B20+,TO-92,C9753,MAXIM,DS18B20+,Heatsink temperature 1-Wire,vorhanden WHIN Elektro-Module-Kiste-2 R3-F4 (2x TO-92),yes https://www.lcsc.com/product-detail/C9753.html
 U_ESP,ESP32-C6-SuperMini,MODULE_SOCKETED,,,ESP32-C6 SuperMini,Plugged into J_ESP_*; not soldered,vorhanden WHIN Elektro-Module-Kiste1 R1-F1 (9x),module_stock_not_lcsc
-FILT_OPT,DC-EMI-Filter 0-50V/4A,offboard,,,optional series on 12V,Optional off-board EMI filter,vorhanden WHIN Elektro-Module-Kiste-2 R2-F6 (3x) — not on PCB footprint,stock_optional
+FILT_OPT,DC-EMI-Filter 0-50V/4A,offboard,,,optional series on 12V,Optional off-board EMI filter,vorhanden WHIN Elektro-Module-Kiste-2 R2-F6 (3x) - not on PCB footprint,stock_optional

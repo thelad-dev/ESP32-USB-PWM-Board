@@ -10,10 +10,10 @@
 
 ## Zwei Wege
 
-1. **Auftragsweg:** Vier Kanaele wie bisher (IRLZ44N TO-220, 4-Pin-Header), Temp-Sensor, C3 gesteckt, Fertigungsarchiv.
-2. **Alternative (genommen):** Pro Kanal SMD-Logic-FET (z. B. AO3400A) statt TO-220 — PWM-Leitung fuehrt nur Gate-Strom am Luefter-PWM-Eingang, TO-220 ist Overkill und blockiert Platinenflaeche bei vier Kanaelen. 1-Kanal-Doku und Prinzip (Low-Side, Gate 100R/100k, Tach-Pull-up) bleiben; Bauform wechselt begruendet.
+1. **Minimalweg:** Vier Kanaele wie bisher (IRLZ44N TO-220, 4-Pin-Header), Temp-Sensor, C3 gesteckt, Fertigungsarchiv.
+2. **Alternative (genommen):** Pro Kanal SMD-Logic-FET (z. B. AO3400A) statt TO-220 - PWM-Leitung fuehrt nur Gate-Strom am Luefter-PWM-Eingang, TO-220 ist Overkill und blockiert Platinenflaeche bei vier Kanaelen. 1-Kanal-Doku und Prinzip (Low-Side, Gate 100R/100k, Tach-Pull-up) bleiben; Bauform wechselt begruendet.
 
-**Gelassen:** Vier IRLZ44N vertical auf einer Handloet-Platine — funktioniert, aber unnoetig gross und teuer fuer Signalstrom.
+**Gelassen:** Vier IRLZ44N vertical auf einer Handloet-Platine - funktioniert, aber unnoetig gross und teuer fuer Signalstrom.
 
 ## Ablehnung
 
