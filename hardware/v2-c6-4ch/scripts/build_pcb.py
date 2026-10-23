@@ -322,7 +322,7 @@ def build() -> str:
     u_temp = place(
         board, "Package_TO_SOT_THT.pretty", "TO-92", "U_TEMP", "DS18B20+", 80, 18, 0
     )
-    # TO-92 KiCad: 1,2,3 — DS18B20 flat-facing: 1=GND 2=DQ 3=VDD
+    # TO-92 KiCad: 1,2,3 - DS18B20 flat-facing: 1=GND 2=DQ 3=VDD
     set_pad_net(u_temp, "1", gnd)
     set_pad_net(u_temp, "2", temp)
     set_pad_net(u_temp, "3", p3v3)
@@ -478,7 +478,7 @@ def build() -> str:
         r_c = fps[f"R{i+1}C"]
         connect_pads(board, tpad, r_c.FindPadByNumber("2"), 0.25, F_Cu, tach_gpio_nets[i])
 
-        # Fan PWM pad to Q drain (same net — short track if needed)
+        # Fan PWM pad to Q drain (same net - short track if needed)
         q = fps[f"Q{i+1}"]
         jfan = fps[f"J_FAN{i+1}"]
         connect_pads(

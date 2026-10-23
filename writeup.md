@@ -4,7 +4,7 @@ Dieses Dokument beschreibt die **v1-Schaltung (1 Kanal)** und die **v2-Erweiteru
 
 ---
 
-## Teil A — v1 (1 Kanal, DevKitC)
+## Teil A - v1 (1 Kanal, DevKitC)
 
 Dokumentation fuer ein kleines Board: ESP32 per USB (Serial Monitor / eigenes Tool), PWM und Tacho (RPM) fuer einen 4-Pin-PC-Luefter (+12V, GND, Tach, PWM).
 
@@ -24,7 +24,7 @@ R1: ca. 100 Ω zwischen GPIO und Gate (daempft Ringing, schont ESP-Ausgang).
 R2: ca. 100 kΩ Gate → GND (Pulldown, definiert AUS beim Boot).
 (Bei sehr hoher PWM-Frequenz und Problemen mit Flanken ggf. Treiber diskutieren; fuer typ. ~25 kHz PC-Luefter meist nicht noetig.)
 
-Alternativen (wenn du spaeter SMD/kleiner willst): IRLML6344, AO3400A — hier ist IRLZ44N die feste Empfehlung fuer v1.
+Alternativen (spaeter SMD/kleiner): IRLML6344, AO3400A - hier ist IRLZ44N die feste Empfehlung fuer v1.
 
 3. Tacho (RPM)
 Typisch Open-Collector am Luefter: Impulse nach GND.
@@ -70,13 +70,13 @@ Luefter Pin 1: +12V
 Baud: z. B. 115200
 Beispiel-Befehle: PWM 0 … PWM 100 (Duty in %), RPM oder ? fuer letzte Messung.
 PWM-Ausgang: LEDC o. ae., Frequenz typ. ~25 kHz (PC-Luefter ueblich).
-Tacho: 2 Impulse/Umdrehung ist bei vielen Lueftern ueblich — im Code als Konstante, ggf. pro Modell anpassen.
+Tacho: 2 Impulse/Umdrehung ist bei vielen Lueftern ueblich - im Code als Konstante, ggf. pro Modell anpassen.
 Firmware-Archiv: `legacy/1ch/`.
 8. Abschnitt fuer KiCad / Fertigung (v1)
 KiCad liest kein Markdown direkt als Schaltplan. Praktisch:
 
 8.1 BOM als CSV
-Siehe `hardware/bom-1channel.csv` (LCSC damals leer — bewusst; Bestellung laeuft ueber v2).
+Siehe `hardware/bom-1channel.csv` (LCSC damals leer - bewusst; Bestellung laeuft ueber v2).
 
 8.2 Netzliste / Signale (Referenz fuers Zeichnen in Eeschema)
 Netname Beschreibung
@@ -107,7 +107,7 @@ Eine vollstaendige .kicad_sch per Copy-Paste aus dem Chat ist fehleranfaellig (U
 
 ---
 
-## Teil B — v2 (4 Kanaele + Temperatur, ESP32-C6 SuperMini)
+## Teil B - v2 (4 Kanaele + Temperatur, ESP32-C6 SuperMini)
 
 Ziel: vier unabhaengige Luefterkanaele (PWM out + Tach in), ein Temperatureingang am Kuehlkoerper (SAS-Karte / pxmx), ESP32-C6 SuperMini **gesteckt** (Buchsenleisten), bestellbares PCB.
 
@@ -125,13 +125,13 @@ Beschaltung: VDD→3V3, GND→GND, DQ→GPIO21 mit 4,7 kΩ Pull-up. Onboard TO-9
 
 ### 11b. Bestand: MOSFET-Modul und Levelshifter
 
-Siehe `hardware/v2-c6-4ch/INVENTORY-DECISIONS.md`. Kurz: fertiges 4-Kanal-MOSFET-PWM-Modul schaltet die **Lastversorgung**, nicht den Luefter-PWM-Steuerpin — bleibt ungenutzt fuer die Kanaele. 2447-Levelshifter und 817-Optokoppler-Module bleiben Steckmodule; Tacho-Schutz ist diskret auf dem Board (1k + 10k + BAT54S).
+Siehe `hardware/v2-c6-4ch/INVENTORY-DECISIONS.md`. Kurz: fertiges 4-Kanal-MOSFET-PWM-Modul schaltet die **Lastversorgung**, nicht den Luefter-PWM-Steuerpin - bleibt ungenutzt fuer die Kanaele. 2447-Levelshifter und 817-Optokoppler-Module bleiben Steckmodule; Tacho-Schutz ist diskret auf dem Board (1k + 10k + BAT54S).
 
 ### 12. ESP32-C6 Pinbudget und Belegung
 
-Captain: C6 statt C3 (Bestand). C6-SuperMini hat **2×10** Header und andere Pinreihenfolge als C3-SuperMini — **kein gemeinsamer Steckplatz**.
+Entscheidung: C6 statt C3 (Bestand). C6-SuperMini hat **2×10** Header und andere Pinreihenfolge als C3-SuperMini - **kein gemeinsamer Steckplatz**.
 
-Sichere GPIOs (kein Strapping 4–9, kein LED 15, kein USB 12/13, kein UART 16/17):
+Sichere GPIOs (kein Strapping 4-9, kein LED 15, kein USB 12/13, kein UART 16/17):
 
 | Funktion | GPIO | Hinweis |
 |----------|------|---------|
@@ -210,7 +210,7 @@ Pfad: `hardware/v2-c6-4ch/`
 
 Platine: 90 mm × 70 mm, 2 Layer. GND als explizite Tracks (kein automatisches Zone-Fill im Headless-Generator).
 
-**Preise / Lager / Lieferzeit: ungeprueft** — im Fertiger-/LCSC-Warenkorb pruefen.
+**Preise / Lager / Lieferzeit: ungeprueft** - im Fertiger-/LCSC-Warenkorb pruefen.
 
 ### 19. Firmware v2
 
@@ -224,4 +224,4 @@ Ein gueltiger serieller `PWM`-Befehl uebernimmt den betroffenen Kanal beziehungs
 2. Ohne ESP: 12 V anlegen → Luefter sollen voll laufen (Fail-safe).
 3. ESP stecken, USB, `STATUS` / `TEMP` / `PWM 1 50`.
 4. Tach-Pegel am GPIO mit Scope/Logikpruefer: nur 0…3,3 V.
-5. Verpolungstest nur mit PTC/Schutz — kurz, PTC darf ausloesen.
+5. Verpolungstest nur mit PTC/Schutz - kurz, PTC darf ausloesen.
